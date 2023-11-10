@@ -1,4 +1,11 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+/* eslint-disable prettier/prettier */
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity({ name: 'city' })
 export class CityEntity {
@@ -6,7 +13,7 @@ export class CityEntity {
   id: number;
 
   @Column({ name: 'state_id', nullable: false })
-  state_id: string;
+  stateId: number;
 
   @Column({ name: 'name', nullable: false })
   name: number;

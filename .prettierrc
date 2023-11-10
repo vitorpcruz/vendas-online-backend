@@ -1,8 +1,6 @@
 {
-  "printWidth": 90,
-  "singleQuote": true,
-  "trailingComma": "all",
   "semi": true,
-  "bracketSpacing": true,
-  "endOfLine": "lf"
+  "trailingComma": "all",
+  "singleQuote": true,
+  "printWidth": 80
 }
