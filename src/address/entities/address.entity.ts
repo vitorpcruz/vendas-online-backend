@@ -1,4 +1,10 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity({ name: 'address' })
 export class AddressEntity {
@@ -6,19 +12,19 @@ export class AddressEntity {
   id: number;
 
   @Column({ name: 'user_id', nullable: false })
-  user_id: string;
+  userId: number;
 
   @Column({ name: 'complement', nullable: true })
-  complement: number;
+  complement: string;
 
-  @Column({ name: 'number_address', nullable: false })
-  number_address: string;
+  @Column({ name: 'number', nullable: false, type: 'integer' })
+  numberAddress: number;
 
   @Column({ name: 'cep', nullable: false })
   cep: string;
 
   @Column({ name: 'city_id', nullable: false })
-  city_id: number;
+  cityId: number;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
