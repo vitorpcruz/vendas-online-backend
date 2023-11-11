@@ -1,7 +1,6 @@
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Cache } from 'cache-manager';
+import { CacheService } from 'src/cache/cache.service';
 import { Repository } from 'typeorm/repository/Repository';
 import { CityEntity } from './entities/city.entity';
 
@@ -10,24 +9,30 @@ export class CityService {
   constructor(
     @InjectRepository(CityEntity)
     private readonly cityRepository: Repository<CityEntity>,
-
-    @Inject(CACHE_MANAGER)
-    private cacheManager: Cache,
+    private cacheService: CacheService,
   ) {}
 
   async getAllCitiesByState(stateId: number): Promise<CityEntity[]> {
-    const citiesCache: CityEntity[] = await this.cacheManager.get(
+    return this.cacheService.getCache<CityEntity[]>(
       `state_${stateId}`,
+      async () =>
+        await this.cityRepository.find({
+          where: { stateId },
+        }),
     );
 
-    if (citiesCache) return citiesCache;
+    // const citiesCache: CityEntity[] = await this.cacheManager.get(
+    //   ,
+    // );
 
-    const cities: CityEntity[] = await this.cityRepository.find({
-      where: { stateId },
-    });
+    // if (citiesCache) return citiesCache;
 
-    await this.cacheManager.set(`state_${stateId}`, cities);
+    // const cities: CityEntity[] = await this.cityRepository.find({
+    //   where: { stateId },
+    // });
 
-    return cities;
+    // await this.cacheManager.set(`state_${stateId}`, cities);
+
+    // return cities;
   }
 }
