@@ -1,11 +1,4 @@
-import {
-  Body,
-  Controller,
-  Param,
-  Post,
-  UsePipes,
-  ValidationPipe,
-} from '@nestjs/common';
+import { Body, Controller, Param, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { AddressService } from './address.service';
 import CreateAddressDTO from './dtos/createAddress.dto';
 
@@ -13,7 +6,7 @@ import CreateAddressDTO from './dtos/createAddress.dto';
 export class AddressController {
   constructor(private readonly addressService: AddressService) {}
 
-  @Post('./:userId')
+  @Post('/:userId')
   @UsePipes(ValidationPipe)
   async createAddress(
     @Param('userId') userId: number,

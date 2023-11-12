@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CacheService } from 'src/cache/cache.service';
 import { Repository } from 'typeorm/repository/Repository';
@@ -20,19 +20,15 @@ export class CityService {
           where: { stateId },
         }),
     );
+  }
 
-    // const citiesCache: CityEntity[] = await this.cacheManager.get(
-    //   ,
-    // );
+  async findById(id: number): Promise<void> {
+    await this.cityRepository
+      .findOne({ where: { id } })
+      .then(this.throwExceptionIfNull);
+  }
 
-    // if (citiesCache) return citiesCache;
-
-    // const cities: CityEntity[] = await this.cityRepository.find({
-    //   where: { stateId },
-    // });
-
-    // await this.cacheManager.set(`state_${stateId}`, cities);
-
-    // return cities;
+  throwExceptionIfNull(city: CityEntity): void | NotFoundException {
+    if (!city) throw new NotFoundException('User not found');
   }
 }
