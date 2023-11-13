@@ -19,10 +19,7 @@ export class UserController {
   @Get()
   async getAllUsers(): Promise<ReturnUserDTO[]> {
     const users: UserEntity[] = await this.userService.getAllUsers();
-    // const returnUsersDTO: ReturnUserDTO[] = users.map(ReturnUserDTO.fill);
-    const returnUsersDTO: ReturnUserDTO[] = users.map(
-      (user) => new ReturnUserDTO(user),
-    );
+    const returnUsersDTO: ReturnUserDTO[] = users.map(ReturnUserDTO.fill);
     return returnUsersDTO;
   }
 
@@ -34,8 +31,8 @@ export class UserController {
 
   @Get('/:userId')
   async getUserById(@Param('userId') userId: number): Promise<ReturnUserDTO> {
-    return new ReturnUserDTO(
-      await this.userService.getUserByIdUsingRelations(userId),
-    );
+    const user: UserEntity =
+      await this.userService.getUserByIdUsingRelations(userId);
+    return new ReturnUserDTO(user);
   }
 }
