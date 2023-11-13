@@ -23,10 +23,13 @@ export class UserController {
     return returnUsersDTO;
   }
 
+  // TODO: Refactor: verify if returns necessary
   @UsePipes(ValidationPipe)
   @Post()
-  async createUser(@Body() createUserDTO: CreateUserDTO): Promise<UserEntity> {
-    return this.userService.createUser(createUserDTO);
+  async createUser(
+    @Body() createUserDTO: CreateUserDTO,
+  ): Promise<ReturnUserDTO> {
+    return new ReturnUserDTO(await this.userService.createUser(createUserDTO));
   }
 
   @Get('/:userId')
