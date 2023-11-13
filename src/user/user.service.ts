@@ -29,7 +29,16 @@ export class UserService {
   }
 
   async findEntity(userId: number) {
-    await this.userRepository.findOneBy({ id: userId }).then(this.throwExceptionIfNull);
+    await this.userRepository
+      .findOneBy({ id: userId })
+      .then(this.throwExceptionIfNull);
+  }
+
+  async getUserByIdUsingRelations(userId: number): Promise<UserEntity> {
+    return this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['addresses'],
+    });
   }
 
   throwExceptionIfNull(user: UserEntity): void | NotFoundException {

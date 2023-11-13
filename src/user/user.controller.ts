@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   UsePipes,
   ValidationPipe,
@@ -18,7 +19,10 @@ export class UserController {
   @Get()
   async getAllUsers(): Promise<ReturnUserDTO[]> {
     const users: UserEntity[] = await this.userService.getAllUsers();
-    const returnUsersDTO: ReturnUserDTO[] = users.map(ReturnUserDTO.fill);
+    // const returnUsersDTO: ReturnUserDTO[] = users.map(ReturnUserDTO.fill);
+    const returnUsersDTO: ReturnUserDTO[] = users.map(
+      (user) => new ReturnUserDTO(user),
+    );
     return returnUsersDTO;
   }
 
@@ -26,5 +30,12 @@ export class UserController {
   @Post()
   async createUser(@Body() createUserDTO: CreateUserDTO): Promise<UserEntity> {
     return this.userService.createUser(createUserDTO);
+  }
+
+  @Get('/:userId')
+  async getUserById(@Param('userId') userId: number): Promise<ReturnUserDTO> {
+    return new ReturnUserDTO(
+      await this.userService.getUserByIdUsingRelations(userId),
+    );
   }
 }
