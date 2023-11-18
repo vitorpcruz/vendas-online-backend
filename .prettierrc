@@ -3,5 +3,8 @@
   "trailingComma": "all",
   "singleQuote": true,
   "endOfLine": "lf",
-  "arrowParens": "always"
+  "arrowParens": "always",
+  "bracketSpacing": true,
+  "bracketSameLine": true,
+  "embeddedLanguageFormatting": "off"
 }

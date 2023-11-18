@@ -17,12 +17,14 @@ export class UserService {
   ) {}
 
   async createUser(createUserDTO: CreateUserDTO): Promise<UserEntity> {
-    await this.findUserByEmail(createUserDTO.email).then((user) =>
-      this.throwNotFoundExceptionByCondition(
-        user !== null,
-        UserService.MESSAGE_EMAIL_IN_USE,
-      ),
-    );
+    await this.userRepository
+      .findOne({ where: { email: createUserDTO.email } })
+      .then((user) => {
+        this.throwNotFoundExceptionByCondition(
+          user !== null && user !== undefined,
+          UserService.MESSAGE_EMAIL_IN_USE,
+        );
+      });
 
     const salt = 10;
     const passwordHashed = await hash(createUserDTO.password, salt);
@@ -41,7 +43,7 @@ export class UserService {
 
   async findUserById(userId: number) {
     await this.userRepository
-      .findOneBy({ id: userId })
+      .findOne({ where: { id: userId } })
       .then(this.throwExceptionIfNull());
   }
 
@@ -57,9 +59,11 @@ export class UserService {
   }
 
   async findUserByEmail(email: string): Promise<UserEntity> {
-    return await this.userRepository
-      .findOneBy({ email })
+    const user = await this.userRepository
+      .findOne({ where: { email } })
       .then(this.throwExceptionIfNull(UserService.MESSAGE_USER_NOT_FOUND));
+
+    return user;
   }
 
   throwExceptionIfNull(message: string = UserService.MESSAGE_USER_NOT_FOUND) {
