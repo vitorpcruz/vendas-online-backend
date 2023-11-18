@@ -1,14 +1,21 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { compare } from 'bcrypt';
+import { ReturnUserDTO } from 'src/user/dtos/returnUser.dto';
 import { UserEntity } from 'src/user/entities/user.entity';
 import { UserService } from 'src/user/user.service';
 import { LoginDTO } from './dtos/login.dto';
+import { LoginPayload } from './dtos/loginPayload.dto';
+import { ReturnLogin } from './dtos/returnLogin.dto';
 
 @Injectable()
 export class AppAuthService {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private jwtService: JwtService,
+  ) {}
 
-  async login(loginDto: LoginDTO): Promise<UserEntity> {
+  async login(loginDto: LoginDTO): Promise<ReturnLogin> {
     const user: UserEntity = await this.userService.findUserByEmail(
       loginDto.email,
     );
@@ -18,6 +25,9 @@ export class AppAuthService {
     if (!isMatch)
       throw new NotFoundException(UserService.MESSAGE_EMAIL_PASSWORD_INVALID);
 
-    return user;
+    return {
+      accessToken: this.jwtService.sign({ ...new LoginPayload(user) }),
+      user: new ReturnUserDTO(user),
+    };
   }
 }

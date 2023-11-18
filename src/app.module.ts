@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserModule } from './user/user.module';
-import { StateModule } from './state/state.module';
-import { CityModule } from './city/city.module';
 import { AddressModule } from './address/address.module';
-import { CacheModule } from './cache/cache.module';
 import { AppAuthModule } from './app-auth/app-auth.module';
+import { CacheModule } from './cache/cache.module';
+import { CityModule } from './city/city.module';
+import { StateModule } from './state/state.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [

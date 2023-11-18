@@ -6,10 +6,9 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ReturnUserDTO } from 'src/user/dtos/returnUser.dto';
-import { UserEntity } from 'src/user/entities/user.entity';
 import { AppAuthService } from './app-auth.service';
 import { LoginDTO } from './dtos/login.dto';
+import { ReturnLogin } from './dtos/returnLogin.dto';
 
 @Controller('auth')
 export class AppAuthController {
@@ -18,8 +17,8 @@ export class AppAuthController {
   @Post()
   @UsePipes(ValidationPipe)
   @HttpCode(200)
-  async login(@Body() loginDto: LoginDTO): Promise<ReturnUserDTO> {
-    const user: UserEntity = await this.authService.login(loginDto);
-    return new ReturnUserDTO(user);
+  async login(@Body() loginDto: LoginDTO): Promise<ReturnLogin> {
+    const user: ReturnLogin = await this.authService.login(loginDto);
+    return user;
   }
 }

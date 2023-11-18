@@ -1,4 +1,11 @@
-import { Body, Controller, Param, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Param,
+  Post,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { AddressService } from './address.service';
 import CreateAddressDTO from './dtos/createAddress.dto';
 
