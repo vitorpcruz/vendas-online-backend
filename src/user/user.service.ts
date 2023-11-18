@@ -9,6 +9,7 @@ import { UserEntity } from './entities/user.entity';
 export class UserService {
   static readonly MESSAGE_USER_NOT_FOUND = 'User not found';
   static readonly MESSAGE_EMAIL_PASSWORD_INVALID = 'Email or password invalid';
+  static readonly MESSAGE_EMAIL_IN_USE = 'Email in use.';
 
   constructor(
     @InjectRepository(UserEntity)
@@ -16,6 +17,13 @@ export class UserService {
   ) {}
 
   async createUser(createUserDTO: CreateUserDTO): Promise<UserEntity> {
+    await this.findUserByEmail(createUserDTO.email).then((user) =>
+      this.throwNotFoundExceptionByCondition(
+        user !== null,
+        UserService.MESSAGE_EMAIL_IN_USE,
+      ),
+    );
+
     const salt = 10;
     const passwordHashed = await hash(createUserDTO.password, salt);
 
@@ -31,7 +39,7 @@ export class UserService {
     return users;
   }
 
-  async findEntity(userId: number) {
+  async findUserById(userId: number) {
     await this.userRepository
       .findOneBy({ id: userId })
       .then(this.throwExceptionIfNull());
@@ -51,9 +59,7 @@ export class UserService {
   async findUserByEmail(email: string): Promise<UserEntity> {
     return await this.userRepository
       .findOneBy({ email })
-      .then(
-        this.throwExceptionIfNull(UserService.MESSAGE_EMAIL_PASSWORD_INVALID),
-      );
+      .then(this.throwExceptionIfNull(UserService.MESSAGE_USER_NOT_FOUND));
   }
 
   throwExceptionIfNull(message: string = UserService.MESSAGE_USER_NOT_FOUND) {
@@ -61,5 +67,16 @@ export class UserService {
       if (!user) throw new NotFoundException(message);
       return user;
     };
+  }
+
+  throwExceptionIfUserExists() {
+    return function (user: UserEntity): NotFoundException {
+      if (user) throw new NotFoundException(UserService.MESSAGE_EMAIL_IN_USE);
+      return;
+    };
+  }
+
+  throwNotFoundExceptionByCondition(condition: boolean, message: string) {
+    if (condition) throw new NotFoundException(message);
   }
 }
