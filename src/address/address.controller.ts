@@ -6,9 +6,12 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { Roles } from 'src/roles.decorators';
+import { UserType } from 'src/user/enum/user-type.enum';
 import { AddressService } from './address.service';
 import CreateAddressDTO from './dtos/createAddress.dto';
 
+@Roles(UserType.User)
 @Controller('address')
 export class AddressController {
   constructor(private readonly addressService: AddressService) {}
