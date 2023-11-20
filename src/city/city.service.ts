@@ -22,10 +22,10 @@ export class CityService {
     );
   }
 
-  async findById(id: number): Promise<void> {
-    await this.cityRepository
-      .findOne({ where: { id } })
-      .then(this.throwExceptionIfNull);
+  async findById(id: number): Promise<CityEntity> {
+    const city = await this.cityRepository.findOne({ where: { id } });
+
+    return city;
   }
 
   throwExceptionIfNull(city: CityEntity): void | NotFoundException {

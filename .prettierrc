@@ -6,5 +6,6 @@
   "arrowParens": "always",
   "bracketSpacing": true,
   "bracketSameLine": true,
-  "embeddedLanguageFormatting": "off"
+  "embeddedLanguageFormatting": "off",
+  "printWidth": 80
 }
